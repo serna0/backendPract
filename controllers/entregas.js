@@ -11,27 +11,36 @@ const entregaGet = async(req = request, res = response) => {
     const [ total, entrega ] = await Promise.all([
         Entrega.countDocuments(query),
         Entrega.find(query)
+            .populate( 'cordid',['nombre','app','apm','telefono','usuario'] )
+            .populate( 'comid' ,'nombre')
+            .populate( 'beneid', ['nombre','app','apm','telefono','domicilio','comid'])
             .skip( Number( desde ) )
             .limit(Number( limite ))
     ]);
 
     res.json({
-        ip,
         total,
+        entrega
     });
 }
 
 const entregaPost = async(req, res = response) => {
     
-    const { comid, cordid, telefono, cordinadorasuplente, telefonosuplente, beneid } = req.body;
-    const entrega = new Entrega({ comid, cordid, telefono, cordinadorasuplente, telefonosuplente, beneid });
+    const data = req.body; 
 
-    // Guardar en BD
-    await entrega.save();
+    data2 = {
+        cordid: req.usuario._id,
+        ...data,
+    }
 
     res.json({
-        entrega
+        data2
     });
+
+    const entrega = new Entrega( data2 );
+    await entrega.save();
+
+    res.status(201).json( entrega );
 }
 
 const entregaPut = async(req, res = response) => {
@@ -39,15 +48,11 @@ const entregaPut = async(req, res = response) => {
     const { id } = req.params;
     const { _id,  password, usuario, ...resto } = req.body;
 
-    if ( password ) {
-        // Encriptar la contraseña
-        const salt = bcryptjs.genSaltSync();
-        resto.password = bcryptjs.hashSync( password, salt );
-    }
+    /* No se ocupa*/
 
-    const cordinadora = await Cordinadora.findByIdAndUpdate( id, resto );
-
-    res.json(cordinadora);
+    res.json({
+        msg: 'No esta disponible'
+    });
 }
 
 const entregaPatch = (req, res = response) => {
@@ -59,10 +64,10 @@ const entregaPatch = (req, res = response) => {
 const entregaDelete = async(req, res = response) => {
 
     const { id } = req.params;
-    const usuario = await Cordinadora.findByIdAndUpdate( id, { estado: false } );
+    const entrega = await Entrega.findByIdAndUpdate( id, { estado: false } );
 
     
-    res.json(usuario);
+    res.json(entrega);
 }
 
 

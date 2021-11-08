@@ -8,7 +8,7 @@ const {
     tieneRole
 } = require('../middlewares');
 
-const { esRoleValido, cordinadoraExiste, existeCordinadoraPorId } = require('../helpers/db-validators');
+const { esRoleValido, existeBeneficiarioPorId, existeComunidadPorId } = require('../helpers/db-validators');
 
 const { 
     entregaGet,
@@ -27,20 +27,25 @@ router.get('/', [
 
 /* Crear */
 router.post('/', [
-    check('comid','La comunidad es obligatorio').not().isEmpty(),
-    check('cordid','La cordinadora es obligatorio').not().isEmpty(),
+    validarJWT,
+    // check('comid','La comunidad es obligatorio').not().isEmpty(),
+    // check('cordid','La cordinadora es obligatorio').not().isEmpty(),
+    check('comid').custom( existeComunidadPorId ),
     check('telefono','El numero telefonico es obligatorio').not().isEmpty(),
-    check('beneid','El beneficiario es obligatorio').not().isEmpty(),
+    // check('beneid','El beneficiario es obligatorio').not().isEmpty(),
+    check('beneid').custom( existeBeneficiarioPorId ),
     validarCampos
 ], entregaPost);
 
 /* Actualizar entregas */
 router.put('/', [
+    validarJWT,
     validarCampos
 ], entregaPut);
 
 /* Borrar entegas */
 router.delete('/:id', [
+    validarJWT,
     validarCampos
 ], entregaDelete );
 

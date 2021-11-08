@@ -10,7 +10,7 @@ const {
 } = require('../middlewares');
 
 /* Helpers */
-const { esRoleValido, existeBeneficiarioPorId } = require('../helpers/db-validators');
+const { esRoleValido, existeBeneficiarioPorId, existeComunidadPorId } = require('../helpers/db-validators');
 
 
 const { 
@@ -36,7 +36,8 @@ router.post('/', [
     check('apm', 'El segudo apellido no debe estar vacio').not().isEmpty(),
     check('telefono', 'El numero telefonico es obligatorio').not().isEmpty(),
     check('domicilio', 'El domicilio es obligatorio').not().isEmpty(),
-    check('comid','La comunidad es obligatorio').not().isEmpty(),
+    // check('comid','La comunidad es obligatorio').not().isEmpty(),
+    check('comid').custom( existeComunidadPorId ),
     check('rol').custom( esRoleValido ), 
     validarCampos
 ], beneficiariosPost );

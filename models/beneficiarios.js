@@ -27,8 +27,9 @@ const BeneficiarioSchema = Schema({
     },
     /* Este debe ser ID */
     comid: {
-        type: String,
-        required: [true, 'La comunidad es obligatorio']
+        type: Schema.Types.ObjectId,
+        ref: 'Comunidades',
+        required: true
     },
     ruta: {
         type: String,

@@ -12,12 +12,13 @@ const beneficiariosGet = async(req = request, res = response) => {
     const [ total, beneficiario ] = await Promise.all([
         Beneficiario.countDocuments(query),
         Beneficiario.find(query)
+            .populate( 'comid' ,'nombre')
             .skip( Number( desde ) )
             .limit(Number( limite ))
     ]);
 
     res.json({
-        total,
+        total,  
         beneficiario
     });
 

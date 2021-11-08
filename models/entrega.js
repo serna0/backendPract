@@ -4,16 +4,18 @@ const EntregaSchema = Schema({
 
     /* Este debe ser ID */
     comid: {
-        type: String,
-        required: [true, 'La comunidad es obligatorio']
+        type: Schema.Types.ObjectId,
+        ref: 'Comunidades',
+        required: true
     },
     fecharegistro: {
         type: String,
         default: new Date()
     },
     cordid: {
-        type: String,
-        required: [true, 'La cordinadora es obligatorio'],
+        type: Schema.Types.ObjectId,
+        ref: "Cordinadoras",
+        required: true
     },
     telefono: {
         type: String,
@@ -26,8 +28,9 @@ const EntregaSchema = Schema({
       type: String  
     },
     beneid: {
-        type: String,
-        required: [true, 'El beneficiario es obligatorio']
+        type: Schema.Types.ObjectId,
+        ref: 'Beneficiarios',
+        required: true
     },
     estado: {
         type: Boolean,

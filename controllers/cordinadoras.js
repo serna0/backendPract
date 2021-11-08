@@ -14,6 +14,7 @@ const cordinadorasGet = async(req = request, res = response) => {
     const [ total, cordinadoras ] = await Promise.all([
         Cordinadora.countDocuments(query),
         Cordinadora.find(query)
+            .populate( 'comid' ,'nombre')
             .skip( Number( desde ) )
             .limit(Number( limite ))
     ]);
