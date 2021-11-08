@@ -47,14 +47,24 @@ const existeComunidadPorId = async( id ) => {
     }
 }
 
+/* Validar colecciones permitidas para subir la foto o archivo */
+const coleccionesPermitidas = ( coleccion = '', colecciones = [] )=> {
 
+    const incluida = colecciones.includes( coleccion );
+    if( !incluida ){
+        throw new Error(`La coleccion ${coleccion} no es permitida`);
+    }
+
+    return true;
+}
 
 module.exports = {
     esRoleValido,
     cordinadoraExiste,
     existeCordinadoraPorId,
     existeBeneficiarioPorId,
-    existeComunidadPorId
+    existeComunidadPorId,
+    coleccionesPermitidas
 }
 
 

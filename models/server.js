@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const fileUpload = require('express-fileupload');
 
 const { dbConnection } = require('../database/config');
 
@@ -14,7 +15,8 @@ class Server {
             cordinadora: "/api/cordinadoras",
             beneficiario: '/api/beneficiario',
             comunidad: '/api/comunidad',
-            entregas: "/api/entregas"
+            entregas: "/api/entregas",
+            uploads: "/api/uploads"
         };
 
         // Conectar a base de datos
@@ -43,6 +45,13 @@ class Server {
         // Directorio Público
         this.app.use( express.static('public') );
 
+        // Subir arhicos
+        this.app.use(fileUpload({
+            useTempFiles : true,
+            tempFileDir : '/tmp/',
+            createParentPath : true
+        }));
+
     }
 
     routes() {
@@ -52,6 +61,7 @@ class Server {
         this.app.use( this.paths.beneficiario, require('../routes/beneficiario'));
         this.app.use( this.paths.comunidad, require('../routes/comunidad'));
         this.app.use( this.paths.entregas, require('../routes/entregas'));
+        this.app.use( this.paths.uploads, require('../routes/uploads'));
 
     }
 
